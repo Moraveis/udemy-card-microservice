@@ -17,12 +17,14 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  config:
+    import: "optional:configserver:http://localhost:8071/"
 
 build:
   version: "3.0"
 
 cards:
-  message: "DEV - Welcome to Accounts API"
+  message: "DEV - Welcome to Cards API"
   contact-details:
     name: "Joao Vitor"
     email: "test@test.com"
