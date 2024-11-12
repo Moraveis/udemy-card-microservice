@@ -1,6 +1,10 @@
 server:
   port: 8082
 
+logging:
+  level:
+    course.udemy.springboot.cards: DEBUG
+
 spring:
   application:
     name: cards
