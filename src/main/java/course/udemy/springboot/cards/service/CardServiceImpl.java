@@ -4,6 +4,8 @@ import course.udemy.springboot.cards.constant.CardConstants;
 import course.udemy.springboot.cards.dto.CardDto;
 import course.udemy.springboot.cards.entity.Card;
 import course.udemy.springboot.cards.exception.CardAlreadyExistsException;
+import course.udemy.springboot.cards.exception.ResourceNotFoundException;
+import course.udemy.springboot.cards.mapper.CardMapper;
 import course.udemy.springboot.cards.repository.CardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,16 +43,27 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardDto fetchCard(String mobileNumber) {
-        return null;
+        Card cards = cardRepository.findByMobileNumber(mobileNumber).orElseThrow(
+                () -> new ResourceNotFoundException("Card", "mobileNumber", mobileNumber)
+        );
+        return CardMapper.mapToCardsDto(cards, new CardDto());
     }
 
     @Override
     public boolean updateCard(CardDto cardsDto) {
-        return false;
+        Card cards = cardRepository.findByCardNumber(cardsDto.getCardNumber()).orElseThrow(
+                () -> new ResourceNotFoundException("Card", "CardNumber", cardsDto.getCardNumber()));
+        CardMapper.mapToCards(cardsDto, cards);
+        cardRepository.save(cards);
+        return true;
     }
 
     @Override
     public boolean deleteCard(String mobileNumber) {
-        return false;
+        Card cards = cardRepository.findByMobileNumber(mobileNumber).orElseThrow(
+                () -> new ResourceNotFoundException("Card", "mobileNumber", mobileNumber)
+        );
+        cardRepository.deleteById(cards.getCardId());
+        return true;
     }
 }
